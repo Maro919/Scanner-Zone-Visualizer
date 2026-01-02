@@ -1,32 +1,32 @@
 <html>
 <head>
-    <script src="js/util/parseFields.js"></script>
-    <script src="js/util/parseZones.js"></script>
-    <script src="js/util/linkFields.js"></script>
-    <script src="js/graphics/drawField.js"></script>
-    <script src="js/graphics/drawAGV.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/visualizer/util/parseFields.js"></script>
+    <script src="js/visualizer/util/parseZones.js"></script>
+    <script src="js/visualizer/util/linkFields.js"></script>
+    <script src="js/visualizer/graphics/drawField.js"></script>
+    <script src="js/visualizer/graphics/drawAGV.js"></script>
+    <script src="js/creator/main.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body onload="main()">  
     <h1 style="color:orangered">Scanner Zone Creator v0.1 Beta</h1>
     <div class="container">
-        <div class="containerDiv">
+        <div class="containerDivColumn">
             <fieldset>
                 <legend>Main Controls</legend>
-                <input class="defaultButton" id="fileSelect" type="file"/>
-                <button class="defaultButton" id="download">Download</button>
-                <button class="defaultButton" id="downloadAll">Download All</button>
-                <button class="defaultButton" id="downloadConfig">Download Config</button>
-                <button class="defaultButton" id="creatorMode" onclick="window.location.href='visualizer.html'">Visualizer Mode</button>
+                <input class="defaultButton liquid" id="fileSelect" type="file"/>
+                <button class="defaultButton liquid" id="download">Download</button>
+                <button class="defaultButton liquid" id="downloadAll">Download All</button>
+                <button class="defaultButton liquid" id="downloadConfig">Download Config</button>
+                <button class="defaultButton liquid" id="creatorMode" onclick="window.location.href='visualizer.html'">Visualizer Mode</button>
             </fieldset> 
             <fieldset>
                 <legend>Main Settings</legend>
                 <!--<label>Main Scanner:</label>
                 <input type="text" placeholder="Main Scanner" id="mainScanner">-->
                 <label>AGV Image</label>
-                <input class="defaultButton" type="file" id="agvImage">
+                <input class="defaultButton liquid" type="file" id="agvImage">
                 <label>X:</label>
                 <input type="number" id="imageX" placeholder="x">
                 <label>Y:</label>
@@ -38,9 +38,9 @@
             </fieldset>
             <fieldset>
                 <legend>Cases</legend>
-                <input class="defaultButton" type="file" id="caseFile">
-                <button class="defaultButton" id="addCase">Add</button>
-                <button class="defaultButton" id="delCase">Remove</button>
+                <input class="defaultButton liquid" type="file" id="caseFile">
+                <button class="defaultButton liquid" id="addCase">Add</button>
+                <button class="defaultButton liquid" id="delCase">Remove</button>
                 <select id="caseID">
                     <option value=-1>None</option>
                 </select>
@@ -48,14 +48,28 @@
             </fieldset>
             <fieldset>
                 <legend>Scanners</legend>
-                <button class="defaultButton" id="addScanner">Add Scanner</button>
+                <button class="defaultButton liquid" id="addScanner">Add Scanner</button>
                 <ol id="scannerList"></ol>
             </fieldset>
         </div>
-        <div class="containerDiv" id="drawArea">
-            <!--<canvas id="canvas" width="1000" height="1000" style="background-color: #fff;"></canvas>-->
-            <img class="agvViz" src="" id="preview">
+
+        <!-- DEVELOPMENT -->
+
+        <div class="containerDivRow" id="drawArea">
+            <fieldset>
+                <legend>AMR</legend>
+                <!--<canvas id="canvas" width="1000" height="1000" style="background-color: #fff;"></canvas>-->
+                <img class="agvViz" src="" id="preview">
+            </fieldset>
+            <fieldset>
+                <legend>Points</legend>
+                <button class="defaultButton liquid" id="addPoint">Add Point</button>
+                <ol id="pointList"></ol>
+            </fieldset>
         </div>
+
+        <!-- DEVELOPMENT -->
+
     </div>
 </body>
 </html>

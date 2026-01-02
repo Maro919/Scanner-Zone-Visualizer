@@ -28,9 +28,18 @@ function drawField(field, ctx) {
 // Field polygon
 function fieldPolygon(poly, ctx) {
     ctx.save();
-    ctx.beginPath();
 
+    ctx.save();
+    ctx.beginPath();
+    polygon(poly.points, ctx);
+    ctx.setLineDash([5, 2, 10, 15, 5, 2, 5, 2, 10, 2, 5, 15, 10, 2, 10, 2, 10, 15, 5, 2, 10, 2, 5, 15, 10, 2, 10, 15, 5, 2, 5, 15, 10, 2, 5, 2, 10, 2, 5, 20]);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.beginPath();
+    
     let points = poly.points;
+    /*
     for (let i = 1; i < points.length; i++) {
         polygon([
             {x: 0, y: 0},
@@ -39,7 +48,23 @@ function fieldPolygon(poly, ctx) {
             {x: 0, y: 0}
         ], ctx);
     }
+    ctx.fill();*/
+
+    let pts = [];
+    for (let i = 1; i < points.length; i++) {
+        pts.push(
+            {x: 0, y: 0},
+            points[i - 1],
+            points[i],
+            {x: 0, y: 0}
+        );
+    }
+
+    let contour = createContour(pts);
+    //console.log(contour);
+    polygon(contour, ctx);
     ctx.fill();
+    //ctx.stroke();
 
     ctx.restore();
 }
@@ -50,6 +75,7 @@ function cutoutPolygon(poly, ctx) {
     ctx.beginPath();
 
     let points = poly.points;
+    /*
     for (let i = 1; i < points.length; i++) {
         let l1 = Math.sqrt(points[i - 1].x * points[i - 1].x + points[i - 1].y * points[i - 1].y);
         let v1 = {x: points[i - 1].x / l1, y: points[i - 1].y / l1};
@@ -67,20 +93,50 @@ function cutoutPolygon(poly, ctx) {
     ctx.clip();
     ctx.clearRect(-10000, -10000, 20000, 20000);
     //ctx.stroke();
+    */
+    let pts = [];
+    for (let i = 1; i < points.length; i++) {
+        let l1 = Math.sqrt(points[i - 1].x * points[i - 1].x + points[i - 1].y * points[i - 1].y);
+        let v1 = {x: points[i - 1].x / l1, y: points[i - 1].y / l1};
+        let l2 = Math.sqrt(points[i].x * points[i].x + points[i].y * points[i].y);
+        let v2 = {x: points[i].x / l2, y: points[i].y / l2};
+
+        let p = [
+            points[i - 1],
+            {x: points[i - 1].x + v1.x * 500, y: points[i - 1].y + v1.y * 500},
+            {x: points[i].x + v2.x * 500, y: points[i].y + v2.y * 500},
+            points[i],
+            points[i - 1]
+        ];
+
+        pts.push(...p);
+    }
+
+    let contour = createContour(pts);
+    polygon(contour, ctx);
+    ctx.clip();
+    ctx.clearRect(-10000, -10000, 20000, 20000);
+    ctx.stroke();
 
     ctx.restore();
 }
-/*
+
 //Field sector approx
 function fieldSector(sector, ctx) {
     let p1 = {x: sector.x + Math.cos(sector.startAngle) * sector.radius, y: sector.y + Math.sin(sector.startAngle) * sector.radius};
     let p2 = {x: sector.x + Math.cos(sector.endAngle) * sector.radius, y: sector.y + Math.sin(sector.endAngle) * sector.radius};
+
     let poly = {
         points: [
             sector,
             p1
         ]
     };
+    if (sector.startAngle == -sector.endAngle) {
+        poly = {
+            points: [p1]
+        }
+    }
 
     if (sector.startAngle < sector.endAngle) {
         for (let i = sector.startAngle; i < sector.endAngle; i += Math.PI / 8) {
@@ -97,7 +153,11 @@ function fieldSector(sector, ctx) {
     }
 
     poly.points.push(p2);
-    poly.points.push(sector);
+    if (sector.startAngle != -sector.endAngle) {
+        poly.points.push(sector);
+    } else {
+        poly.points.push(p1);
+    }
 
     fieldPolygon(poly, ctx);
 }
@@ -112,6 +172,11 @@ function cutoutSector(sector, ctx) {
             p1
         ]
     };
+    if (sector.startAngle == -sector.endAngle) {
+        poly = {
+            points: [p1]
+        }
+    }
 
     if (sector.startAngle < sector.endAngle) {
         for (let i = sector.startAngle; i < sector.endAngle; i += Math.PI / 8) {
@@ -128,12 +193,16 @@ function cutoutSector(sector, ctx) {
     }
 
     poly.points.push(p2);
-    poly.points.push(sector);
+    if (sector.startAngle != -sector.endAngle) {
+        poly.points.push(sector);
+    } else {
+        poly.points.push(p1);
+    }
 
     cutoutPolygon(poly, ctx);
 }
-*/
 
+/*
 // Field sector
 function fieldSector(sector, ctx) {
     ctx.save();
@@ -313,7 +382,7 @@ function cutoutSector(sector, ctx) {
     ctx.restore();
     //ctx.stroke();
 }
-
+*/
 function polygon(points, ctx) {
     let dir = 0;
     for (let i = 1; i < points.length; i++) {

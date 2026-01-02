@@ -227,12 +227,12 @@ function addScanners(params = [], append) {
         li.innerHTML = `<label>Name:</label>
                         <input type="text" placeholder="Name" class = "name">
                         <label>Files:</label>
-                        <input class="defaultButton files" type="file" multiple>
+                        <input class="defaultButton liquid files" type="file" multiple>
                         <label>X:</label>
                         <input type="number" class="x" placeholder="x">
                         <label>Y:</label>
                         <input type="number" class="y" placeholder="y">
-                        <button class="defaultButton remove">Remove</button>
+                        <button class="defaultButton liquid remove">Remove</button>
                         <select class="case"></select>`;
 
         let name = li.querySelector('.name');

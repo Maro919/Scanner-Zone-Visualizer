@@ -88,5 +88,7 @@ function getSize(config, id) {
         }
     }
 
+    return { w: 4000, h: 4000, x: -2000, y: -2000 };
+
     return { w: maxX - minX, h: maxY - minY, x: minX, y: minY};
 }
